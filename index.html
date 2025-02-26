@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Puntajes - Generala</title>
+    <style>
+        :root {
+            --primary: #3a86ff;
+            --success: #38b000;
+            --danger: #d90429;
+            --warning: #ffb703;
+            --dark: #212529;
+            --light: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--light);
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        h1, h2 {
+            color: var(--dark);
+            text-align: center;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin: 5px;
+        }
+        
+        button:hover {
+            opacity: 0.9;
+        }
+        
+        button.success {
+            background-color: var(--success);
+        }
+        
+        button.danger {
+            background-color: var(--danger);
+        }
+        
+        button.warning {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+        
+        input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .player-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .player-chip {
+            background-color: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .player-chip button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 0 5px;
+            margin: 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .editable {
+            cursor: pointer;
+        }
+        
+        .editable:hover {
+            background-color: #e7f3ff;
+        }
+        
+        .total-row {
+            font-weight: bold;
+            background-color: #e7f3ff !important;
+        }
+        
+        .score-input {
+            width: 50px;
+            text-align: center;
+        }
+        
+        .score-cell {
+            position: relative;
+        }
+        
+        .score-popup {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            display: none;
+        }
+        
+        .rules-section {
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            th, td {
+                padding: 5px;
+                font-size: 12px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Registro de Puntajes - Generala</h1>
+        
+        <div id="player-setup">
+            <h2>Agregar Jugadores</h2>
+            <div>
+                <input type="text" id="player-name" placeholder="Nombre del jugador">
+                <button onclick="addPlayer()">Agregar Jugador</button>
+            </div>
+            <div class="player-list" id="player-list"></div>
+            <button class="success" onclick="startGame()" id="start-game">Comenzar Juego</button>
+        </div>
+        
+        <div id="game-section" style="display: none;">
+            <h2>Partida en Curso</h2>
+            <div>
+                <button class="warning" onclick="showRules()">Ver Reglas</button>
+                <button class="danger" onclick="resetGame()">Reiniciar Juego</button>
+                <button onclick="addNewPlayer()">Agregar Jugador</button>
+            </div>
+            <div id="score-table-container">
+                <!-- La tabla se generará dinámicamente -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="container rules-section" id="rules-section" style="display: none;">
+        <h2>Reglas de la Generala</h2>
+        <p>La generala se juega con cinco dados. El objetivo es lograr diferentes combinaciones para sumar puntos:</p>
+        <ul>
+            <li><strong>Números (1-6):</strong> Se suma el valor de todos los dados del número elegido.</li>
+            <li><strong>Escalera:</strong> 20 puntos - Conseguir cinco números consecutivos (1-2-3-4-5 o 2-3-4-5-6).</li>
+            <li><strong>Full:</strong> 30 puntos - Tres dados de un valor y dos de otro.</li>
+            <li><strong>Póker:</strong> 40 puntos - Cuatro dados del mismo valor.</li>
+            <li><strong>Generala:</strong> 50 puntos - Cinco dados iguales.</li>
+            <li><strong>Generala Doble:</strong> 100 puntos - Segunda generala en el mismo juego.</li>
+        </ul>
+        <p>Cada jugador tiene tres lanzamientos por turno. Después del primer lanzamiento, puede conservar dados y relanzar los demás.</p>
+        <button onclick="hideRules()">Cerrar Reglas</button>
+    </div>
+
+    <script>
+        // Almacenamiento de datos del juego
+        let players = [];
+        let currentGame = null;
+        
+        // Categorías de juego
+        const categories = [
+            { id: 'ones', name: '1' },
+            { id: 'twos', name: '2' },
+            { id: 'threes', name: '3' },
+            { id: 'fours', name: '4' },
+            { id: 'fives', name: '5' },
+            { id: 'sixes', name: '6' },
+            { id: 'escalera', name: 'Escalera' },
+            { id: 'full', name: 'Full' },
+            { id: 'poker', name: 'Póker' },
+            { id: 'generala', name: 'Generala' },
+            { id: 'dobleGenerala', name: 'Generala Doble' }
+        ];
+        
+        // Guardar en localStorage
+        function saveGameState() {
+            localStorage.setItem('generala-players', JSON.stringify(players));
+            if (currentGame) {
+                localStorage.setItem('generala-current-game', JSON.stringify(currentGame));
+            }
+        }
+        
+        // Cargar desde localStorage
+        function loadGameState() {
+            const savedPlayers = localStorage.getItem('generala-players');
+            const savedGame = localStorage.getItem('generala-current-game');
+            
+            if (savedPlayers) {
+                players = JSON.parse(savedPlayers);
+                updatePlayerList();
+            }
+            
+            if (savedGame) {
+                currentGame = JSON.parse(savedGame);
+                document.getElementById('player-setup').style.display = 'none';
+                document.getElementById('game-section').style.display = 'block';
+                renderScoreTable();
+            }
+        }
+        
+        // Agregar jugador
+        function addPlayer() {
+            const nameInput = document.getElementById('player-name');
+            const name = nameInput.value.trim();
+            
+            if (name) {
+                players.push({ id: Date.now().toString(), name });
+                nameInput.value = '';
+                updatePlayerList();
+                saveGameState();
+            }
+        }
+        
+        // Eliminar jugador
+        function removePlayer(id) {
+            players = players.filter(player => player.id !== id);
+            updatePlayerList();
+            saveGameState();
+        }
+        
+        // Actualizar la lista de jugadores
+        function updatePlayerList() {
+            const playerList = document.getElementById('player-list');
+            playerList.innerHTML = '';
+            
+            players.forEach(player => {
+                const playerChip = document.createElement('div');
+                playerChip.className = 'player-chip';
+                playerChip.innerHTML = `
+                    ${player.name}
+                    <button onclick="removePlayer('${player.id}')">×</button>
+                `;
+                playerList.appendChild(playerChip);
+            });
+            
+            // Habilitar/deshabilitar botón de inicio
+            document.getElementById('start-game').disabled = players.length === 0;
+        }
+        
+        // Iniciar juego
+        function startGame() {
+            if (players.length === 0) return;
+            
+            // Inicializar el juego
+            currentGame = {
+                players: players.map(player => ({
+                    id: player.id,
+                    name: player.name,
+                    scores: {}
+                }))
+            };
+            
+            document.getElementById('player-setup').style.display = 'none';
+            document.getElementById('game-section').style.display = 'block';
+            renderScoreTable();
+            saveGameState();
+        }
+        
+        // Reiniciar juego
+        function resetGame() {
+            if (confirm('¿Estás seguro de que quieres reiniciar el juego? Se perderán todos los puntajes.')) {
+                currentGame = null;
+                localStorage.removeItem('generala-current-game');
+                document.getElementById('player-setup').style.display = 'block';
+                document.getElementById('game-section').style.display = 'none';
+            }
+        }
+        
+        // Agregar jugador durante el juego
+        function addNewPlayer() {
+            const name = prompt('Ingresa el nombre del nuevo jugador:');
+            if (name && name.trim()) {
+                const newPlayer = { id: Date.now().toString(), name: name.trim() };
+                players.push(newPlayer);
+                currentGame.players.push({ 
+                    id: newPlayer.id, 
+                    name: newPlayer.name, 
+                    scores: {} 
+                });
+                renderScoreTable();
+                saveGameState();
+            }
+        }
+        
+        // Renderizar tabla de puntajes
+        function renderScoreTable() {
+            const container = document.getElementById('score-table-container');
+            
+            let tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Categoría</th>
+                            ${currentGame.players.map(player => `<th>${player.name}</th>`).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            // Agregar filas para cada categoría
+            categories.forEach(category => {
+                tableHTML += `
+                    <tr>
+                        <td>${category.name}</td>
+                        ${currentGame.players.map(player => {
+                            const score = player.scores[category.id];
+                            return `
+                                <td class="score-cell editable" onclick="editScore('${player.id}', '${category.id}')">
+                                    ${score !== undefined ? score : '-'}
+                                </td>
+                            `;
+                        }).join('')}
+                    </tr>
+                `;
+            });
+            
+            // Fila de totales
+            tableHTML += `
+                <tr class="total-row">
+                    <td>TOTAL</td>
+                    ${currentGame.players.map(player => {
+                        const total = calculateTotal(player);
+                        return `<td>${total}</td>`;
+                    }).join('')}
+                </tr>
+            `;
+            
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+            
+            container.innerHTML = tableHTML;
+        }
+        
+        // Calcular puntaje total
+        function calculateTotal(player) {
+            return Object.values(player.scores).reduce((sum, score) => sum + (score || 0), 0);
+        }
+        
+        // Editar puntaje
+        function editScore(playerId, categoryId) {
+            const player = currentGame.players.find(p => p.id === playerId);
+            if (!player) return;
+            
+            const currentScore = player.scores[categoryId] !== undefined ? player.scores[categoryId] : '';
+            const newScore = prompt(`Ingresa el puntaje para ${player.name} (${getCategoryName(categoryId)}):`, currentScore);
+            
+            if (newScore !== null) {
+                const score = newScore.trim() === '' ? undefined : parseInt(newScore);
+                
+                if (newScore.trim() === '' || (!isNaN(score) && score >= 0)) {
+                    player.scores[categoryId] = score;
+                    renderScoreTable();
+                    saveGameState();
+                } else {
+                    alert('Por favor ingresa un número válido mayor o igual a cero.');
+                }
+            }
+        }
+        
+        // Obtener nombre de categoría por ID
+        function getCategoryName(categoryId) {
+            const category = categories.find(c => c.id === categoryId);
+            return category ? category.name : categoryId;
+        }
+        
+        // Mostrar/ocultar reglas
+        function showRules() {
+            document.getElementById('rules-section').style.display = 'block';
+        }
+        
+        function hideRules() {
+            document.getElementById('rules-section').style.display = 'none';
+        }
+        
+        // Inicializar al cargar la página
+        window.onload = function() {
+            loadGameState();
+        };
+    </script>
+</body>
+</html>
