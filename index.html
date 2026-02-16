@@ -13,20 +13,20 @@
             --dark: #212529;
             --light: #f8f9fa;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--light);
             padding: 20px;
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         h1, h2 {
             color: var(--dark);
             text-align: center;
         }
-        
+
         .container {
             background-color: white;
             border-radius: 8px;
@@ -34,7 +34,7 @@
             padding: 20px;
             margin-bottom: 20px;
         }
-        
+
         button {
             background-color: var(--primary);
             color: white;
@@ -46,24 +46,29 @@
             transition: background-color 0.2s;
             margin: 5px;
         }
-        
+
         button:hover {
             opacity: 0.9;
         }
-        
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
         button.success {
             background-color: var(--success);
         }
-        
+
         button.danger {
             background-color: var(--danger);
         }
-        
+
         button.warning {
             background-color: var(--warning);
             color: var(--dark);
         }
-        
+
         input {
             padding: 8px;
             border: 1px solid #ccc;
@@ -72,14 +77,14 @@
             width: 100%;
             margin-bottom: 10px;
         }
-        
+
         .player-list {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             margin: 10px 0;
         }
-        
+
         .player-chip {
             background-color: var(--primary);
             color: white;
@@ -88,7 +93,7 @@
             display: flex;
             align-items: center;
         }
-        
+
         .player-chip button {
             background: none;
             border: none;
@@ -98,76 +103,401 @@
             padding: 0 5px;
             margin: 0;
         }
-        
+
+        .game-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .status-panel {
+            border: 1px solid #e8edf2;
+            border-radius: 8px;
+            padding: 12px;
+            background-color: #f7fbff;
+            margin-bottom: 10px;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .status-card {
+            background-color: white;
+            border: 1px solid #d9e7f7;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .status-card span {
+            color: #5b6770;
+            font-size: 12px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .status-card strong {
+            color: var(--dark);
+            font-size: 16px;
+        }
+
+        .pending-line {
+            background-color: white;
+            border: 1px solid #e6edf4;
+            border-radius: 6px;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        .turn-actions {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 6px;
+        }
+
+        .column-order-hint {
+            text-align: center;
+            font-size: 13px;
+            color: #4e5d69;
+            margin-bottom: 10px;
+        }
+
+        .player-column-header {
+            cursor: grab;
+            user-select: none;
+            position: relative;
+        }
+
+        .player-column-header:active {
+            cursor: grabbing;
+        }
+
+        .player-column-header.dragging-column {
+            opacity: 0.65;
+        }
+
+        .player-column-header.drop-left::before,
+        .player-column-header.drop-right::after {
+            content: "";
+            position: absolute;
+            top: 2px;
+            bottom: 2px;
+            width: 4px;
+            border-radius: 2px;
+            background-color: #ffb703;
+        }
+
+        .player-column-header.drop-left::before {
+            left: 1px;
+        }
+
+        .player-column-header.drop-right::after {
+            right: 1px;
+        }
+
+        .drag-hint {
+            font-size: 11px;
+            margin-top: 4px;
+            opacity: 0.9;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            min-width: 680px;
         }
-        
+
         th, td {
             padding: 10px;
             text-align: center;
             border: 1px solid #ddd;
         }
-        
+
         th {
             background-color: var(--primary);
             color: white;
         }
-        
+
+        th.current-turn-header {
+            background-color: var(--success);
+        }
+
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
-        
+
         .editable {
             cursor: pointer;
         }
-        
+
         .editable:hover {
             background-color: #e7f3ff;
         }
-        
+
+        .current-turn-column {
+            background-color: #eefbe9 !important;
+        }
+
         .total-row {
             font-weight: bold;
             background-color: #e7f3ff !important;
         }
-        
-        .score-input {
-            width: 50px;
-            text-align: center;
-        }
-        
+
         .score-cell {
             position: relative;
         }
-        
-        .score-popup {
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            z-index: 10;
-            display: none;
+
+        .score-crossed {
+            color: var(--danger);
+            text-decoration: line-through;
+            font-weight: bold;
         }
-        
+
+        .player-header-meta {
+            font-size: 12px;
+            margin-top: 4px;
+            opacity: 0.9;
+        }
+
         .rules-section {
             margin-top: 30px;
         }
-        
+
+        .hidden {
+            display: none !important;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background-color: rgba(17, 24, 39, 0.55);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+
+        .score-editor-modal {
+            width: min(560px, 100%);
+            background-color: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #e4ebf3;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.22);
+            padding: 16px;
+        }
+
+        .score-editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .score-editor-title {
+            margin: 0;
+            font-size: 19px;
+            color: var(--dark);
+        }
+
+        .score-editor-subtitle {
+            margin: 2px 0 0;
+            color: #5f6d78;
+            font-size: 13px;
+        }
+
+        .icon-btn {
+            border: 1px solid #dbe5ee;
+            background: white;
+            color: #425466;
+            border-radius: 6px;
+            padding: 2px 10px;
+            font-size: 20px;
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        .editor-turn-warning {
+            margin: 8px 0 10px;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            background-color: #fff4d6;
+            color: #5f4b00;
+            border: 1px solid #ffe093;
+        }
+
+        .editor-mode-group {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .editor-mode-btn {
+            margin: 0;
+            border: 1px solid #d5e2f2;
+            background: #f3f8ff;
+            color: #2f4f79;
+            padding: 9px 8px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .editor-mode-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .editor-score-input-wrap {
+            margin-bottom: 12px;
+        }
+
+        .editor-score-input-wrap label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 13px;
+            color: #4f6272;
+        }
+
+        .editor-score-input {
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 17px;
+            text-align: center;
+            margin: 0;
+        }
+
+        .editor-fixed-score-wrap {
+            margin-bottom: 12px;
+            border: 1px solid #e1e9f3;
+            border-radius: 10px;
+            padding: 10px;
+            background-color: #f8fbff;
+        }
+
+        .editor-fixed-score-label {
+            margin: 0 0 8px;
+            font-size: 13px;
+            color: #4f6272;
+        }
+
+        .editor-served-group {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .editor-served-btn {
+            margin: 0;
+            border: 1px solid #d5e2f2;
+            background: #f3f8ff;
+            color: #2f4f79;
+            padding: 8px 6px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .editor-served-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .editor-fixed-score-result {
+            font-size: 14px;
+            color: #2d3b48;
+        }
+
+        .editor-fixed-score-result strong {
+            font-size: 18px;
+        }
+
+        .editor-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .suggestion-chip {
+            margin: 0;
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid #c8dcf5;
+            background-color: #f6fbff;
+            color: #2d4a71;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .editor-error {
+            font-size: 13px;
+            color: var(--danger);
+            margin-bottom: 8px;
+            min-height: 18px;
+        }
+
+        .editor-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
         @media (max-width: 768px) {
-            th, td {
-                padding: 5px;
-                font-size: 12px;
+            body {
+                padding: 10px;
             }
-            
+
             .container {
                 padding: 10px;
+            }
+
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+
+            th, td {
+                padding: 6px;
+                font-size: 12px;
+            }
+
+            .column-order-hint {
+                font-size: 12px;
+            }
+
+            .editor-mode-group {
+                grid-template-columns: 1fr;
+            }
+
+            .editor-served-group {
+                grid-template-columns: 1fr;
+            }
+
+            .editor-footer {
+                flex-direction: column;
+            }
+
+            .editor-footer button {
+                width: 100%;
+                margin: 0;
             }
         }
     </style>
@@ -175,7 +505,7 @@
 <body>
     <div class="container">
         <h1>Registro de Puntajes - Generala</h1>
-        
+
         <div id="player-setup">
             <h2>Agregar Jugadores</h2>
             <div>
@@ -185,20 +515,25 @@
             <div class="player-list" id="player-list"></div>
             <button class="success" onclick="startGame()" id="start-game">Comenzar Juego</button>
         </div>
-        
+
         <div id="game-section" style="display: none;">
             <h2>Partida en Curso</h2>
-            <div>
+            <div class="game-actions">
                 <button class="warning" onclick="showRules()">Ver Reglas</button>
                 <button class="danger" onclick="resetGame()">Reiniciar Juego</button>
                 <button onclick="addNewPlayer()">Agregar Jugador</button>
             </div>
+            <div class="status-panel" id="game-status"></div>
+            <div class="turn-actions">
+                <button class="success" onclick="advanceTurn()">Siguiente turno</button>
+            </div>
+            <div class="column-order-hint">Arrastrá los nombres de las columnas para reordenar la ronda.</div>
             <div id="score-table-container">
                 <!-- La tabla se generará dinámicamente -->
             </div>
         </div>
     </div>
-    
+
     <div class="container rules-section" id="rules-section" style="display: none;">
         <h2>Reglas de la Generala</h2>
         <p>La generala se juega con cinco dados. El objetivo es lograr diferentes combinaciones para sumar puntos:</p>
@@ -209,17 +544,128 @@
             <li><strong>Póker:</strong> 40 puntos - Cuatro dados del mismo valor.</li>
             <li><strong>Generala:</strong> 50 puntos - Cinco dados iguales.</li>
             <li><strong>Generala Doble:</strong> 100 puntos - Segunda generala en el mismo juego.</li>
+            <li><strong>Servida:</strong> Si la jugada sale en el primer tiro, suma 5 puntos extra en estas categorías.</li>
         </ul>
         <p>Cada jugador tiene tres lanzamientos por turno. Después del primer lanzamiento, puede conservar dados y relanzar los demás.</p>
         <button onclick="hideRules()">Cerrar Reglas</button>
     </div>
 
+    <div
+        id="score-editor-overlay"
+        class="modal-overlay hidden"
+        onclick="handleScoreEditorOverlayClick(event)"
+    >
+        <div
+            class="score-editor-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="score-editor-title"
+            onclick="event.stopPropagation()"
+        >
+            <div class="score-editor-header">
+                <div>
+                    <h3 id="score-editor-title" class="score-editor-title">Editar casillero</h3>
+                    <p id="score-editor-subtitle" class="score-editor-subtitle"></p>
+                </div>
+                <button class="icon-btn" type="button" onclick="closeScoreEditor()" aria-label="Cerrar">×</button>
+            </div>
+
+            <div id="score-editor-turn-warning" class="editor-turn-warning hidden"></div>
+
+            <div class="editor-mode-group">
+                <button
+                    id="score-editor-mode-score"
+                    class="editor-mode-btn"
+                    type="button"
+                    onclick="setScoreEditorMode('score')"
+                >
+                    Anotar
+                </button>
+                <button
+                    id="score-editor-mode-crossed"
+                    class="editor-mode-btn"
+                    type="button"
+                    onclick="setScoreEditorMode('crossed')"
+                >
+                    Tachar
+                </button>
+                <button
+                    id="score-editor-mode-clear"
+                    class="editor-mode-btn"
+                    type="button"
+                    onclick="setScoreEditorMode('clear')"
+                >
+                    Limpiar
+                </button>
+            </div>
+
+            <div id="score-editor-input-section" class="editor-score-input-wrap">
+                <label for="score-editor-input">Puntaje</label>
+                <input
+                    id="score-editor-input"
+                    class="editor-score-input"
+                    type="number"
+                    min="0"
+                    inputmode="numeric"
+                    onkeydown="handleScoreEditorInputKeydown(event)"
+                >
+                <div id="score-editor-suggestions" class="editor-suggestions"></div>
+            </div>
+
+            <div id="score-editor-fixed-section" class="editor-fixed-score-wrap hidden">
+                <p class="editor-fixed-score-label">¿Fue servida?</p>
+                <div class="editor-served-group">
+                    <button
+                        id="score-editor-served-no"
+                        class="editor-served-btn"
+                        type="button"
+                        onclick="setScoreEditorServed(false)"
+                    >
+                        No servida
+                    </button>
+                    <button
+                        id="score-editor-served-yes"
+                        class="editor-served-btn"
+                        type="button"
+                        onclick="setScoreEditorServed(true)"
+                    >
+                        Servida
+                    </button>
+                </div>
+                <div class="editor-fixed-score-result">
+                    Puntaje automático: <strong id="score-editor-fixed-score-value">0</strong>
+                </div>
+            </div>
+
+            <div id="score-editor-error" class="editor-error"></div>
+
+            <div class="editor-footer">
+                <button type="button" class="danger" onclick="closeScoreEditor()">Cancelar</button>
+                <button type="button" class="success" onclick="saveScoreEditor()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Almacenamiento de datos del juego
         let players = [];
         let currentGame = null;
-        
-        // Categorías de juego
+        let draggedColumnPlayerId = null;
+        let scoreEditorState = {
+            isOpen: false,
+            playerId: null,
+            categoryId: null,
+            mode: 'score',
+            served: false
+        };
+
+        const STORAGE_PLAYERS_KEY = 'generala-players';
+        const STORAGE_GAME_KEY = 'generala-current-game';
+
+        const SCORE_TYPES = {
+            SCORE: 'score',
+            CROSSED: 'crossed'
+        };
+
         const categories = [
             { id: 'ones', name: '1' },
             { id: 'twos', name: '2' },
@@ -233,212 +679,867 @@
             { id: 'generala', name: 'Generala' },
             { id: 'dobleGenerala', name: 'Generala Doble' }
         ];
-        
-        // Guardar en localStorage
+
+        const FIXED_SCORE_CATEGORIES = {
+            escalera: { normal: 20, served: 25 },
+            full: { normal: 30, served: 35 },
+            poker: { normal: 40, served: 45 },
+            generala: { normal: 50, served: 55 },
+            dobleGenerala: { normal: 100, served: 105 }
+        };
+
+        function generatePlayerId() {
+            return `${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
+        }
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
         function saveGameState() {
-            localStorage.setItem('generala-players', JSON.stringify(players));
+            localStorage.setItem(STORAGE_PLAYERS_KEY, JSON.stringify(players));
             if (currentGame) {
-                localStorage.setItem('generala-current-game', JSON.stringify(currentGame));
+                localStorage.setItem(STORAGE_GAME_KEY, JSON.stringify(currentGame));
+            } else {
+                localStorage.removeItem(STORAGE_GAME_KEY);
             }
         }
-        
-        // Cargar desde localStorage
+
+        function normalizePlayersList(list) {
+            if (!Array.isArray(list)) return [];
+
+            return list
+                .map((player) => ({
+                    id: player && player.id ? String(player.id) : generatePlayerId(),
+                    name: player && typeof player.name === 'string' ? player.name.trim() : ''
+                }))
+                .filter((player) => player.name !== '');
+        }
+
+        function normalizeGameState(game) {
+            if (!game || !Array.isArray(game.players) || game.players.length === 0) return null;
+
+            const normalizedPlayers = game.players.map((player) => ({
+                id: player && player.id ? String(player.id) : generatePlayerId(),
+                name: player && typeof player.name === 'string' ? player.name.trim() : 'Jugador',
+                scores: player && typeof player.scores === 'object' && player.scores !== null ? player.scores : {}
+            }));
+
+            const validTurnId = normalizedPlayers.some((player) => player.id === game.turnPlayerId)
+                ? game.turnPlayerId
+                : normalizedPlayers[0].id;
+
+            const normalizedRound = Number.isInteger(game.round) && game.round > 0 ? game.round : 1;
+
+            return {
+                players: normalizedPlayers,
+                turnPlayerId: validTurnId,
+                round: normalizedRound
+            };
+        }
+
         function loadGameState() {
-            const savedPlayers = localStorage.getItem('generala-players');
-            const savedGame = localStorage.getItem('generala-current-game');
-            
+            const savedPlayers = localStorage.getItem(STORAGE_PLAYERS_KEY);
+            const savedGame = localStorage.getItem(STORAGE_GAME_KEY);
+
             if (savedPlayers) {
-                players = JSON.parse(savedPlayers);
-                updatePlayerList();
+                try {
+                    players = normalizePlayersList(JSON.parse(savedPlayers));
+                } catch (error) {
+                    players = [];
+                }
             }
-            
+
             if (savedGame) {
-                currentGame = JSON.parse(savedGame);
+                try {
+                    currentGame = normalizeGameState(JSON.parse(savedGame));
+                } catch (error) {
+                    currentGame = null;
+                }
+            }
+
+            if (currentGame && players.length === 0) {
+                players = currentGame.players.map((player) => ({ id: player.id, name: player.name }));
+            }
+
+            updatePlayerList();
+
+            if (currentGame) {
+                syncPlayersFromGame();
                 document.getElementById('player-setup').style.display = 'none';
                 document.getElementById('game-section').style.display = 'block';
                 renderScoreTable();
             }
         }
-        
-        // Agregar jugador
+
         function addPlayer() {
             const nameInput = document.getElementById('player-name');
             const name = nameInput.value.trim();
-            
-            if (name) {
-                players.push({ id: Date.now().toString(), name });
-                nameInput.value = '';
-                updatePlayerList();
-                saveGameState();
-            }
-        }
-        
-        // Eliminar jugador
-        function removePlayer(id) {
-            players = players.filter(player => player.id !== id);
+
+            if (!name) return;
+
+            players.push({ id: generatePlayerId(), name });
+            nameInput.value = '';
             updatePlayerList();
             saveGameState();
         }
-        
-        // Actualizar la lista de jugadores
+
+        function removePlayer(id) {
+            players = players.filter((player) => player.id !== id);
+            updatePlayerList();
+            saveGameState();
+        }
+
         function updatePlayerList() {
             const playerList = document.getElementById('player-list');
             playerList.innerHTML = '';
-            
-            players.forEach(player => {
+
+            players.forEach((player) => {
                 const playerChip = document.createElement('div');
                 playerChip.className = 'player-chip';
-                playerChip.innerHTML = `
-                    ${player.name}
-                    <button onclick="removePlayer('${player.id}')">×</button>
-                `;
+
+                const playerNameNode = document.createElement('span');
+                playerNameNode.textContent = player.name;
+
+                const removeButton = document.createElement('button');
+                removeButton.type = 'button';
+                removeButton.textContent = '×';
+                removeButton.onclick = () => removePlayer(player.id);
+
+                playerChip.appendChild(playerNameNode);
+                playerChip.appendChild(removeButton);
                 playerList.appendChild(playerChip);
             });
-            
-            // Habilitar/deshabilitar botón de inicio
+
             document.getElementById('start-game').disabled = players.length === 0;
         }
-        
-        // Iniciar juego
+
         function startGame() {
             if (players.length === 0) return;
-            
-            // Inicializar el juego
+
             currentGame = {
-                players: players.map(player => ({
+                players: players.map((player) => ({
                     id: player.id,
                     name: player.name,
                     scores: {}
-                }))
+                })),
+                turnPlayerId: players[0].id,
+                round: 1
             };
-            
+
             document.getElementById('player-setup').style.display = 'none';
             document.getElementById('game-section').style.display = 'block';
             renderScoreTable();
             saveGameState();
         }
-        
-        // Reiniciar juego
+
         function resetGame() {
-            if (confirm('¿Estás seguro de que quieres reiniciar el juego? Se perderán todos los puntajes.')) {
-                currentGame = null;
-                localStorage.removeItem('generala-current-game');
-                document.getElementById('player-setup').style.display = 'block';
-                document.getElementById('game-section').style.display = 'none';
+            if (!confirm('¿Estás seguro de que quieres reiniciar el juego? Se perderán todos los puntajes.')) {
+                return;
             }
+
+            if (scoreEditorState.isOpen) {
+                closeScoreEditor();
+            }
+
+            currentGame = null;
+            localStorage.removeItem(STORAGE_GAME_KEY);
+            document.getElementById('player-setup').style.display = 'block';
+            document.getElementById('game-section').style.display = 'none';
         }
-        
-        // Agregar jugador durante el juego
+
         function addNewPlayer() {
+            if (!currentGame) return;
+
             const name = prompt('Ingresa el nombre del nuevo jugador:');
-            if (name && name.trim()) {
-                const newPlayer = { id: Date.now().toString(), name: name.trim() };
-                players.push(newPlayer);
-                currentGame.players.push({ 
-                    id: newPlayer.id, 
-                    name: newPlayer.name, 
-                    scores: {} 
-                });
-                renderScoreTable();
-                saveGameState();
+            if (!name || !name.trim()) return;
+
+            const newPlayer = { id: generatePlayerId(), name: name.trim() };
+
+            players.push(newPlayer);
+            currentGame.players.push({
+                id: newPlayer.id,
+                name: newPlayer.name,
+                scores: {}
+            });
+
+            if (!currentGame.turnPlayerId) {
+                currentGame.turnPlayerId = newPlayer.id;
+            }
+
+            updatePlayerList();
+            renderScoreTable();
+            saveGameState();
+        }
+
+        function syncPlayersFromGame() {
+            if (!currentGame || !Array.isArray(currentGame.players)) return;
+
+            const orderMap = new Map(currentGame.players.map((player, index) => [player.id, index]));
+
+            players.sort((a, b) => {
+                const aIndex = orderMap.has(a.id) ? orderMap.get(a.id) : Number.MAX_SAFE_INTEGER;
+                const bIndex = orderMap.has(b.id) ? orderMap.get(b.id) : Number.MAX_SAFE_INTEGER;
+                return aIndex - bIndex;
+            });
+        }
+
+        function reorderPlayersByColumnDrop(draggedPlayerId, targetPlayerId, placeAfterTarget) {
+            if (!currentGame || !draggedPlayerId || !targetPlayerId || draggedPlayerId === targetPlayerId) return;
+
+            const fromIndex = currentGame.players.findIndex((player) => player.id === draggedPlayerId);
+            const targetIndex = currentGame.players.findIndex((player) => player.id === targetPlayerId);
+            if (fromIndex === -1 || targetIndex === -1) return;
+
+            const [draggedPlayer] = currentGame.players.splice(fromIndex, 1);
+            let insertIndex = targetIndex + (placeAfterTarget ? 1 : 0);
+
+            if (fromIndex < insertIndex) {
+                insertIndex -= 1;
+            }
+
+            currentGame.players.splice(insertIndex, 0, draggedPlayer);
+            syncPlayersFromGame();
+            renderScoreTable();
+            saveGameState();
+        }
+
+        function clearColumnDropIndicators() {
+            document
+                .querySelectorAll('.player-column-header')
+                .forEach((header) => header.classList.remove('drop-left', 'drop-right', 'dragging-column'));
+        }
+
+        function handleColumnDragStart(event, playerId) {
+            draggedColumnPlayerId = playerId;
+            event.currentTarget.classList.add('dragging-column');
+
+            if (event.dataTransfer) {
+                event.dataTransfer.effectAllowed = 'move';
+                event.dataTransfer.setData('text/plain', playerId);
             }
         }
-        
-        // Renderizar tabla de puntajes
+
+        function handleColumnDragOver(event) {
+            if (!draggedColumnPlayerId) return;
+            event.preventDefault();
+
+            const header = event.currentTarget;
+            const targetPlayerId = header.dataset.playerId;
+            if (targetPlayerId === draggedColumnPlayerId) {
+                header.classList.remove('drop-left', 'drop-right');
+                return;
+            }
+
+            const rect = header.getBoundingClientRect();
+            const placeAfterTarget = event.clientX > rect.left + rect.width / 2;
+
+            header.classList.toggle('drop-left', !placeAfterTarget);
+            header.classList.toggle('drop-right', placeAfterTarget);
+
+            if (event.dataTransfer) {
+                event.dataTransfer.dropEffect = 'move';
+            }
+        }
+
+        function handleColumnDragLeave(event) {
+            event.currentTarget.classList.remove('drop-left', 'drop-right');
+        }
+
+        function handleColumnDrop(event, targetPlayerId) {
+            event.preventDefault();
+
+            const draggedPlayerId =
+                draggedColumnPlayerId || (event.dataTransfer ? event.dataTransfer.getData('text/plain') : '');
+
+            const header = event.currentTarget;
+            const rect = header.getBoundingClientRect();
+            const placeAfterTarget = event.clientX > rect.left + rect.width / 2;
+
+            reorderPlayersByColumnDrop(draggedPlayerId, targetPlayerId, placeAfterTarget);
+            clearColumnDropIndicators();
+            draggedColumnPlayerId = null;
+        }
+
+        function handleColumnDragEnd() {
+            clearColumnDropIndicators();
+            draggedColumnPlayerId = null;
+        }
+
+        function getCurrentPlayer() {
+            if (!currentGame || !currentGame.players.length) return null;
+
+            const currentPlayer = currentGame.players.find((player) => player.id === currentGame.turnPlayerId);
+            if (currentPlayer) return currentPlayer;
+
+            currentGame.turnPlayerId = currentGame.players[0].id;
+            return currentGame.players[0];
+        }
+
+        function advanceTurn() {
+            if (!currentGame || currentGame.players.length === 0) return;
+
+            const currentIndex = currentGame.players.findIndex((player) => player.id === currentGame.turnPlayerId);
+            const safeCurrentIndex = currentIndex === -1 ? 0 : currentIndex;
+            const nextIndex = (safeCurrentIndex + 1) % currentGame.players.length;
+
+            if (nextIndex === 0 && currentIndex !== -1) {
+                currentGame.round += 1;
+            }
+
+            currentGame.turnPlayerId = currentGame.players[nextIndex].id;
+            renderScoreTable();
+            saveGameState();
+        }
+
+        function getScoreEntry(player, categoryId) {
+            if (!player || !player.scores) return { type: 'empty' };
+
+            const rawValue = player.scores[categoryId];
+
+            if (rawValue === undefined || rawValue === null || rawValue === '') {
+                return { type: 'empty' };
+            }
+
+            if (typeof rawValue === 'number' && Number.isFinite(rawValue) && rawValue >= 0) {
+                return { type: SCORE_TYPES.SCORE, value: Math.trunc(rawValue) };
+            }
+
+            if (typeof rawValue === 'string') {
+                const normalized = rawValue.trim().toLowerCase();
+                if (normalized === 'x' || normalized === 'tachado' || normalized === SCORE_TYPES.CROSSED) {
+                    return { type: SCORE_TYPES.CROSSED };
+                }
+
+                const parsed = Number.parseInt(rawValue, 10);
+                if (!Number.isNaN(parsed) && parsed >= 0) {
+                    return { type: SCORE_TYPES.SCORE, value: parsed };
+                }
+
+                return { type: 'empty' };
+            }
+
+            if (typeof rawValue === 'object') {
+                if (rawValue.type === SCORE_TYPES.CROSSED || rawValue.crossed === true) {
+                    return { type: SCORE_TYPES.CROSSED };
+                }
+
+                if (rawValue.type === SCORE_TYPES.SCORE && Number.isFinite(rawValue.value) && rawValue.value >= 0) {
+                    return { type: SCORE_TYPES.SCORE, value: Math.trunc(rawValue.value) };
+                }
+
+                if (Number.isFinite(rawValue.value) && rawValue.value >= 0) {
+                    return { type: SCORE_TYPES.SCORE, value: Math.trunc(rawValue.value) };
+                }
+            }
+
+            return { type: 'empty' };
+        }
+
+        function setScoreEntry(player, categoryId, value) {
+            player.scores[categoryId] = {
+                type: SCORE_TYPES.SCORE,
+                value
+            };
+        }
+
+        function setCrossedEntry(player, categoryId) {
+            player.scores[categoryId] = {
+                type: SCORE_TYPES.CROSSED
+            };
+        }
+
+        function clearScoreEntry(player, categoryId) {
+            delete player.scores[categoryId];
+        }
+
+        function getCategoryName(categoryId) {
+            const category = categories.find((item) => item.id === categoryId);
+            return category ? category.name : categoryId;
+        }
+
+        function describeScoreEntry(entry) {
+            if (entry.type === SCORE_TYPES.SCORE) {
+                return `Puntaje: ${entry.value}`;
+            }
+
+            if (entry.type === SCORE_TYPES.CROSSED) {
+                return 'Tachado';
+            }
+
+            return 'Vacío';
+        }
+
+        function getPlayerById(playerId) {
+            if (!currentGame) return null;
+            return currentGame.players.find((player) => player.id === playerId) || null;
+        }
+
+        function isFixedScoreCategory(categoryId) {
+            return Object.prototype.hasOwnProperty.call(FIXED_SCORE_CATEGORIES, categoryId);
+        }
+
+        function getFixedScoreValues(categoryId) {
+            return FIXED_SCORE_CATEGORIES[categoryId] || null;
+        }
+
+        function calculateFixedCategoryScore(categoryId, served) {
+            const values = getFixedScoreValues(categoryId);
+            if (!values) return null;
+            return served ? values.served : values.normal;
+        }
+
+        function inferServedForFixedCategory(categoryId, entry) {
+            if (!entry || entry.type !== SCORE_TYPES.SCORE) return false;
+
+            const values = getFixedScoreValues(categoryId);
+            if (!values) return false;
+            if (entry.value === values.served) return true;
+            if (entry.value === values.normal) return false;
+            return false;
+        }
+
+        function getSuggestedScoresByCategory(categoryId) {
+            const numericCategoryFactor = {
+                ones: 1,
+                twos: 2,
+                threes: 3,
+                fours: 4,
+                fives: 5,
+                sixes: 6
+            };
+
+            if (numericCategoryFactor[categoryId]) {
+                const factor = numericCategoryFactor[categoryId];
+                return [0, factor, factor * 2, factor * 3, factor * 4, factor * 5];
+            }
+
+            if (isFixedScoreCategory(categoryId)) {
+                const fixed = getFixedScoreValues(categoryId);
+                return [fixed.normal, fixed.served, 0];
+            }
+
+            return [0];
+        }
+
+        function setScoreEditorError(message) {
+            const errorNode = document.getElementById('score-editor-error');
+            errorNode.textContent = message || '';
+        }
+
+        function clearScoreEditorError() {
+            setScoreEditorError('');
+        }
+
+        function renderScoreEditorSuggestions(categoryId) {
+            const suggestionsNode = document.getElementById('score-editor-suggestions');
+            if (isFixedScoreCategory(categoryId)) {
+                suggestionsNode.innerHTML = '';
+                return;
+            }
+
+            const suggestions = [...new Set(getSuggestedScoresByCategory(categoryId))];
+
+            suggestionsNode.innerHTML = suggestions
+                .map((value) => (
+                    `<button type="button" class="suggestion-chip" onclick="applySuggestedScore(${value})">${value}</button>`
+                ))
+                .join('');
+        }
+
+        function renderScoreEditorFixedScore() {
+            const categoryId = scoreEditorState.categoryId;
+            if (!isFixedScoreCategory(categoryId)) return;
+
+            const score = calculateFixedCategoryScore(categoryId, scoreEditorState.served);
+            document
+                .getElementById('score-editor-served-no')
+                .classList.toggle('active', !scoreEditorState.served);
+            document
+                .getElementById('score-editor-served-yes')
+                .classList.toggle('active', scoreEditorState.served);
+            document.getElementById('score-editor-fixed-score-value').textContent = String(score);
+        }
+
+        function setScoreEditorServed(served) {
+            scoreEditorState.served = Boolean(served);
+            renderScoreEditorFixedScore();
+            clearScoreEditorError();
+        }
+
+        function updateScoreEditorScoreSections() {
+            const isScoreMode = scoreEditorState.mode === SCORE_TYPES.SCORE;
+            const fixedCategory = isFixedScoreCategory(scoreEditorState.categoryId);
+
+            const inputSection = document.getElementById('score-editor-input-section');
+            const fixedSection = document.getElementById('score-editor-fixed-section');
+
+            inputSection.classList.toggle('hidden', !isScoreMode || fixedCategory);
+            fixedSection.classList.toggle('hidden', !isScoreMode || !fixedCategory);
+
+            if (isScoreMode && fixedCategory) {
+                renderScoreEditorFixedScore();
+            }
+        }
+
+        function setScoreEditorMode(mode, options = {}) {
+            const allowedModes = [SCORE_TYPES.SCORE, SCORE_TYPES.CROSSED, 'clear'];
+            const normalizedMode = allowedModes.includes(mode) ? mode : SCORE_TYPES.SCORE;
+            const shouldFocusInput = options.focusInput !== false;
+
+            scoreEditorState.mode = normalizedMode;
+
+            document
+                .getElementById('score-editor-mode-score')
+                .classList.toggle('active', normalizedMode === SCORE_TYPES.SCORE);
+            document
+                .getElementById('score-editor-mode-crossed')
+                .classList.toggle('active', normalizedMode === SCORE_TYPES.CROSSED);
+            document
+                .getElementById('score-editor-mode-clear')
+                .classList.toggle('active', normalizedMode === 'clear');
+
+            updateScoreEditorScoreSections();
+            clearScoreEditorError();
+
+            if (
+                normalizedMode === SCORE_TYPES.SCORE &&
+                shouldFocusInput &&
+                !isFixedScoreCategory(scoreEditorState.categoryId)
+            ) {
+                const scoreInput = document.getElementById('score-editor-input');
+                scoreInput.focus();
+                scoreInput.select();
+            }
+        }
+
+        function openScoreEditor(playerId, categoryId) {
+            const player = getPlayerById(playerId);
+            if (!player) return;
+
+            const currentEntry = getScoreEntry(player, categoryId);
+            const currentPlayer = getCurrentPlayer();
+
+            scoreEditorState.isOpen = true;
+            scoreEditorState.playerId = playerId;
+            scoreEditorState.categoryId = categoryId;
+            scoreEditorState.served = inferServedForFixedCategory(categoryId, currentEntry);
+
+            document.getElementById('score-editor-title').textContent =
+                `${player.name} · ${getCategoryName(categoryId)}`;
+            document.getElementById('score-editor-subtitle').textContent =
+                `Estado actual: ${describeScoreEntry(currentEntry)}`;
+
+            const warningNode = document.getElementById('score-editor-turn-warning');
+            if (currentPlayer && currentPlayer.id !== playerId) {
+                warningNode.textContent =
+                    `No es el turno de ${player.name}. Si guardás, se actualizará igual.`;
+                warningNode.classList.remove('hidden');
+            } else {
+                warningNode.classList.add('hidden');
+                warningNode.textContent = '';
+            }
+
+            const scoreInput = document.getElementById('score-editor-input');
+            scoreInput.value = currentEntry.type === SCORE_TYPES.SCORE ? String(currentEntry.value) : '';
+            renderScoreEditorSuggestions(categoryId);
+            clearScoreEditorError();
+
+            const initialMode = currentEntry.type === SCORE_TYPES.CROSSED
+                ? SCORE_TYPES.CROSSED
+                : SCORE_TYPES.SCORE;
+            setScoreEditorMode(initialMode, { focusInput: false });
+
+            document.getElementById('score-editor-overlay').classList.remove('hidden');
+            document.body.classList.add('modal-open');
+
+            if (initialMode === SCORE_TYPES.SCORE && !isFixedScoreCategory(categoryId)) {
+                scoreInput.focus();
+                scoreInput.select();
+            }
+        }
+
+        function closeScoreEditor() {
+            scoreEditorState.isOpen = false;
+            scoreEditorState.playerId = null;
+            scoreEditorState.categoryId = null;
+            scoreEditorState.mode = SCORE_TYPES.SCORE;
+            scoreEditorState.served = false;
+            clearScoreEditorError();
+
+            document.getElementById('score-editor-overlay').classList.add('hidden');
+            document.body.classList.remove('modal-open');
+        }
+
+        function handleScoreEditorOverlayClick(event) {
+            if (event.target && event.target.id === 'score-editor-overlay') {
+                closeScoreEditor();
+            }
+        }
+
+        function handleScoreEditorInputKeydown(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                saveScoreEditor();
+            }
+        }
+
+        function applySuggestedScore(value) {
+            if (!scoreEditorState.isOpen) return;
+            if (isFixedScoreCategory(scoreEditorState.categoryId)) return;
+
+            if (scoreEditorState.mode !== SCORE_TYPES.SCORE) {
+                setScoreEditorMode(SCORE_TYPES.SCORE, { focusInput: false });
+            }
+
+            const scoreInput = document.getElementById('score-editor-input');
+            scoreInput.value = String(value);
+            scoreInput.focus();
+            scoreInput.select();
+            clearScoreEditorError();
+        }
+
+        function saveScoreEditor() {
+            if (!scoreEditorState.isOpen || !currentGame) return;
+
+            const player = getPlayerById(scoreEditorState.playerId);
+            if (!player || !scoreEditorState.categoryId) {
+                closeScoreEditor();
+                return;
+            }
+
+            if (scoreEditorState.mode === SCORE_TYPES.SCORE) {
+                if (isFixedScoreCategory(scoreEditorState.categoryId)) {
+                    const fixedScore = calculateFixedCategoryScore(
+                        scoreEditorState.categoryId,
+                        scoreEditorState.served
+                    );
+                    if (fixedScore === null) {
+                        setScoreEditorError('No se pudo calcular el puntaje para esa categoría.');
+                        return;
+                    }
+                    setScoreEntry(player, scoreEditorState.categoryId, fixedScore);
+                } else {
+                    const scoreInput = document.getElementById('score-editor-input');
+                    const inputValue = scoreInput.value.trim();
+                    const parsed = Number.parseInt(inputValue, 10);
+
+                    if (inputValue === '' || Number.isNaN(parsed) || parsed < 0) {
+                        setScoreEditorError('Ingresá un puntaje válido (0 o mayor).');
+                        scoreInput.focus();
+                        return;
+                    }
+
+                    setScoreEntry(player, scoreEditorState.categoryId, parsed);
+                }
+            } else if (scoreEditorState.mode === SCORE_TYPES.CROSSED) {
+                setCrossedEntry(player, scoreEditorState.categoryId);
+            } else {
+                clearScoreEntry(player, scoreEditorState.categoryId);
+            }
+
+            closeScoreEditor();
+            renderScoreTable();
+            saveGameState();
+        }
+
+        function getCompletedCount(player) {
+            return categories.reduce((count, category) => {
+                const entry = getScoreEntry(player, category.id);
+                return entry.type === 'empty' ? count : count + 1;
+            }, 0);
+        }
+
+        function getPendingCategories(player) {
+            return categories.filter((category) => getScoreEntry(player, category.id).type === 'empty');
+        }
+
+        function calculateTotal(player) {
+            return categories.reduce((sum, category) => {
+                const entry = getScoreEntry(player, category.id);
+                return entry.type === SCORE_TYPES.SCORE ? sum + entry.value : sum;
+            }, 0);
+        }
+
+        function getLeader() {
+            if (!currentGame || currentGame.players.length === 0) return null;
+
+            return currentGame.players.reduce((best, player) => {
+                const total = calculateTotal(player);
+                if (!best || total > best.total) {
+                    return { id: player.id, name: player.name, total };
+                }
+                return best;
+            }, null);
+        }
+
+        function renderStatusPanel() {
+            const statusPanel = document.getElementById('game-status');
+            if (!currentGame) {
+                statusPanel.innerHTML = '';
+                return;
+            }
+
+            const currentPlayer = getCurrentPlayer();
+            const leader = getLeader();
+            const pendingCategories = currentPlayer ? getPendingCategories(currentPlayer) : [];
+
+            const turnText = currentPlayer ? escapeHtml(currentPlayer.name) : '-';
+            const roundText = currentGame.round || 1;
+            const leaderText = leader ? `${escapeHtml(leader.name)} (${leader.total})` : '-';
+            const pendingText = pendingCategories.length
+                ? pendingCategories.map((category) => escapeHtml(category.name)).join(', ')
+                : 'Nada pendiente';
+
+            statusPanel.innerHTML = `
+                <div class="status-grid">
+                    <div class="status-card">
+                        <span>Turno actual</span>
+                        <strong>${turnText}</strong>
+                    </div>
+                    <div class="status-card">
+                        <span>Ronda</span>
+                        <strong>${roundText}</strong>
+                    </div>
+                    <div class="status-card">
+                        <span>Líder</span>
+                        <strong>${leaderText}</strong>
+                    </div>
+                </div>
+                <div class="pending-line">
+                    <strong>Le falta completar a ${turnText}:</strong> ${pendingText}
+                </div>
+            `;
+        }
+
         function renderScoreTable() {
             const container = document.getElementById('score-table-container');
-            
+            if (!currentGame) {
+                container.innerHTML = '';
+                return;
+            }
+
+            const currentPlayer = getCurrentPlayer();
+            const currentTurnId = currentPlayer ? currentPlayer.id : null;
+
             let tableHTML = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Categoría</th>
-                            ${currentGame.players.map(player => `<th>${player.name}</th>`).join('')}
-                        </tr>
-                    </thead>
-                    <tbody>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Categoría</th>
+                                ${currentGame.players.map((player) => {
+                                    const completed = getCompletedCount(player);
+                                    const headerClasses = ['player-column-header'];
+                                    if (player.id === currentTurnId) {
+                                        headerClasses.push('current-turn-header');
+                                    }
+
+                                    return `
+                                        <th
+                                            class="${headerClasses.join(' ')}"
+                                            draggable="true"
+                                            data-player-id="${player.id}"
+                                            ondragstart="handleColumnDragStart(event, '${player.id}')"
+                                            ondragover="handleColumnDragOver(event)"
+                                            ondragleave="handleColumnDragLeave(event)"
+                                            ondrop="handleColumnDrop(event, '${player.id}')"
+                                            ondragend="handleColumnDragEnd()"
+                                        >
+                                            ${escapeHtml(player.name)}
+                                            <div class="player-header-meta">${completed}/${categories.length}</div>
+                                            <div class="drag-hint">arrastrar</div>
+                                        </th>
+                                    `;
+                                }).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
             `;
-            
-            // Agregar filas para cada categoría
-            categories.forEach(category => {
+
+            categories.forEach((category) => {
                 tableHTML += `
                     <tr>
-                        <td>${category.name}</td>
-                        ${currentGame.players.map(player => {
-                            const score = player.scores[category.id];
+                        <td>${escapeHtml(category.name)}</td>
+                        ${currentGame.players.map((player) => {
+                            const entry = getScoreEntry(player, category.id);
+                            const displayValue = entry.type === SCORE_TYPES.SCORE
+                                ? entry.value
+                                : entry.type === SCORE_TYPES.CROSSED
+                                    ? '✗'
+                                    : '-';
+
+                            const classes = ['score-cell', 'editable'];
+                            if (player.id === currentTurnId) {
+                                classes.push('current-turn-column');
+                            }
+                            if (entry.type === SCORE_TYPES.CROSSED) {
+                                classes.push('score-crossed');
+                            }
+
                             return `
-                                <td class="score-cell editable" onclick="editScore('${player.id}', '${category.id}')">
-                                    ${score !== undefined ? score : '-'}
+                                <td class="${classes.join(' ')}" onclick="editScore('${player.id}', '${category.id}')">
+                                    ${displayValue}
                                 </td>
                             `;
                         }).join('')}
                     </tr>
                 `;
             });
-            
-            // Fila de totales
+
             tableHTML += `
                 <tr class="total-row">
                     <td>TOTAL</td>
-                    ${currentGame.players.map(player => {
-                        const total = calculateTotal(player);
-                        return `<td>${total}</td>`;
+                    ${currentGame.players.map((player) => {
+                        const currentClass = player.id === currentTurnId ? 'current-turn-column' : '';
+                        return `<td class="${currentClass}">${calculateTotal(player)}</td>`;
                     }).join('')}
                 </tr>
             `;
-            
+
             tableHTML += `
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             `;
-            
+
             container.innerHTML = tableHTML;
+            renderStatusPanel();
         }
-        
-        // Calcular puntaje total
-        function calculateTotal(player) {
-            return Object.values(player.scores).reduce((sum, score) => sum + (score || 0), 0);
-        }
-        
-        // Editar puntaje
+
         function editScore(playerId, categoryId) {
-            const player = currentGame.players.find(p => p.id === playerId);
-            if (!player) return;
-            
-            const currentScore = player.scores[categoryId] !== undefined ? player.scores[categoryId] : '';
-            const newScore = prompt(`Ingresa el puntaje para ${player.name} (${getCategoryName(categoryId)}):`, currentScore);
-            
-            if (newScore !== null) {
-                const score = newScore.trim() === '' ? undefined : parseInt(newScore);
-                
-                if (newScore.trim() === '' || (!isNaN(score) && score >= 0)) {
-                    player.scores[categoryId] = score;
-                    renderScoreTable();
-                    saveGameState();
-                } else {
-                    alert('Por favor ingresa un número válido mayor o igual a cero.');
-                }
-            }
+            if (!currentGame) return;
+            openScoreEditor(playerId, categoryId);
         }
-        
-        // Obtener nombre de categoría por ID
-        function getCategoryName(categoryId) {
-            const category = categories.find(c => c.id === categoryId);
-            return category ? category.name : categoryId;
-        }
-        
-        // Mostrar/ocultar reglas
+
         function showRules() {
             document.getElementById('rules-section').style.display = 'block';
         }
-        
+
         function hideRules() {
             document.getElementById('rules-section').style.display = 'none';
         }
-        
-        // Inicializar al cargar la página
+
         window.onload = function() {
             loadGameState();
+
+            const nameInput = document.getElementById('player-name');
+            nameInput.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    addPlayer();
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && scoreEditorState.isOpen) {
+                    closeScoreEditor();
+                }
+            });
         };
     </script>
 </body>
